@@ -46,6 +46,8 @@ CORE LAB / TEST PRESET is a separate practice mode. It supplies the four cores (
 
 ## Verification and limits
 
-Run `node --test systems.test.mjs` and `node --check game.js`. Eighteen automated tests cover starting state, offer rules, duplicates, shell stats/marks, trigger semantics, cycle speed, order semantics, projectile snapshots, salvage, health density, armor/repair, persistence, generation, collision, enemies and smooth-turn direction.
+Run `node --test systems.test.mjs` and `node --check game.js`. Twenty-three automated tests cover starting state, offer rules, duplicates, shell stats/marks, trigger semantics, cycle speed, order semantics, projectile snapshots, salvage, health density, armor/repair, persistence, generation, collision, enemies, smooth-turn direction, physical core picking, safe dropping, hood touch, and airborne evasion.
 
 New physical VR interactions require Quest testing: touch distance, core reach/drop zones, left-ray targeting, inner-arm HUD angle, jump comfort and performance. Desktop tests cannot certify those. No save system or native app package. Three.js r170 is bundled with its MIT license. `node server.mjs` serves the folder for desktop when local server permissions are available.
+
+

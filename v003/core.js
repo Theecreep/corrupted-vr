@@ -32,11 +32,11 @@ export function smoothTurn(yaw,axis,dt,rate=1.35){const v=Math.abs(axis)<.18?0:M
 // Low-resolution navigation grid around the reusable ruin kit. Recomputed only
 // when an enemy's route expires, so pursuers can actually search around cover.
 export function route(map,start,end){const a={x:Math.round(start.x),z:Math.round(start.z)},b={x:Math.round(end.x),z:Math.round(end.z)},key=p=>`${p.x},${p.z}`,q=[a],seen=new Map([[key(a),null]]);let goal=null;for(let i=0;i<q.length&&i<2200;i++){const p=q[i];if(Math.hypot(p.x-b.x,p.z-b.z)<1.1){goal=p;break;}for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1]]){const n={x:p.x+dx,z:p.z+dz},k=key(n);if(!seen.has(k)&&stand(map,n.x,n.z)){seen.set(k,p);q.push(n);}}}if(!goal)return [];const path=[];while(seen.get(key(goal))){path.unshift(goal);goal=seen.get(key(goal));}return path;}
-export function step(run,p,dt,{hidden=false}={}){if(run.dead)return;run.time+=dt;run.corruption=clamp(run.corruption+dt*.38,run.floor,100);run.shotTimer=Math.max(0,run.shotTimer-dt);run.dashTimer=Math.max(0,run.dashTimer-dt);run.dashTime=Math.max(0,run.dashTime-dt);run.noise=Math.max(0,run.noise-dt);run.hurt=Math.max(0,run.hurt-dt);run.sinceHurt+=dt;if(run.sinceHurt>6&&run.build.firewall.regen)run.hp=Math.min(run.maxHp,run.hp+dt*.35*run.build.firewall.regen);
+export function step(run,p,dt,{hidden=false,airborne=false}={}){if(run.dead)return;run.time+=dt;run.corruption=clamp(run.corruption+dt*.38,run.floor,100);run.shotTimer=Math.max(0,run.shotTimer-dt);run.dashTimer=Math.max(0,run.dashTimer-dt);run.dashTime=Math.max(0,run.dashTime-dt);run.noise=Math.max(0,run.noise-dt);run.hurt=Math.max(0,run.hurt-dt);run.sinceHurt+=dt;if(run.sinceHurt>6&&run.build.firewall.regen)run.hp=Math.min(run.maxHp,run.hp+dt*.35*run.build.firewall.regen);
  const map=run.map,s=stage(run);
  for(const e of map.enemies){if(e.hp<=0||e.dummy)continue;const d=dist(e,p),visible=d<(hidden?4:14)&&sight(map,e,p),heard=run.noise>0&&d<17;e.attack=Math.max(0,e.attack-dt);
  if(visible||heard){e.target={x:p.x,z:p.z};e.mode='chase';e.alert=4;}else if(e.mode==='chase'){e.alert-=dt;if(e.alert<=0){e.mode='search';e.timer=4;}}
- if(e.windup>0){e.windup-=dt;if(e.windup<=0&&d<1.8&&sight(map,e,p))hurt(run,1+s*.5);continue;}
+ if(e.windup>0){e.windup-=dt;if(e.windup<=0&&d<1.8&&!airborne&&sight(map,e,p))hurt(run,1+s*.5);continue;}
  if(e.mode==='chase'&&d<1.4&&e.attack<=0){e.windup=.55;e.attack=1.7;continue;}
  if(e.mode==='search'){e.timer-=dt;if(e.timer<=0){e.mode='patrol';e.timer=0;}}
  if(e.mode==='patrol'){e.timer-=dt;if(e.timer<=0){const a=map.random()*Math.PI*2;e.target={x:e.x+Math.cos(a)*4,z:e.z+Math.sin(a)*4};e.timer=3;}}
