@@ -1,0 +1,26 @@
+// Build rules and firing program shared by the browser and tests.
+export const FIREWALL={health:{symbol:'H',name:'INTEGRITY',detail:'+4 max HP; restore 4 HP'},armor:{symbol:'A',name:'ARMOR',detail:'12% more damage reduction, capped at 65%'},regen:{symbol:'R',name:'REPAIR',detail:'Regenerate after 6 seconds without damage'},speed:{symbol:'V',name:'VELOCITY',detail:'+0.3 walking speed'},jump:{symbol:'J',name:'JUMP',detail:'Unlock jump; later levels raise jump height'},airjump:{symbol:'^',name:'AIR JUMP',detail:'+1 additional airborne jump'},dash:{symbol:'D',name:'DASH',detail:'Unlock dash; later levels improve cooldown'}};
+export const SHELL={damage:{symbol:'+',name:'DAMAGE',detail:'+1 projectile damage',cost:2},rate:{symbol:'>',name:'CYCLE SPEED',detail:'+20% firing and charging speed',cost:2},count:{symbol:':',name:'MULTISHOT',detail:'+1 initial projectile, capped at 6',cost:3}};
+export const CORES={auto:{symbol:'A',name:'AUTOMATIC',detail:'Hold trigger to repeat shots'},charge:{symbol:'C',name:'CHARGE',detail:'Hold to charge; release to fire'},split:{symbol:'S',name:'SPLITTER',detail:'Split after 0.28 s, then run the next core'},bounce:{symbol:'B',name:'BOUNCE',detail:'Bounce off a wall, then run the next core'}};
+export function baseBuild(){return {firewall:{health:0,armor:0,regen:0,speed:0,jump:0,airjump:0,dash:0},shell:{damage:0,rate:0,count:0},cores:[],scrap:0,serial:0,shellMarks:[]};}
+export function upgradeLabel(offer){const def=offer.kind==='firewall'?FIREWALL[offer.key]:offer.kind==='shell'?SHELL[offer.key]:CORES[offer.key];return `${offer.kind==='firewall'?'FIREWALL':offer.kind==='shell'?'SHELL':'CORE'} / ${def.name}`;}
+export function rollOffers(random,build){const fw=Object.keys(FIREWALL).filter(k=>k!=='airjump'||build.firewall.jump>0);const firewall={kind:'firewall',key:fw[Math.floor(random()*fw.length)]};const core=random()<.6,keys=Object.keys(core?CORES:SHELL);return [firewall,{kind:core?'core':'shell',key:keys[Math.floor(random()*keys.length)]}];}
+export function install(run,offer){const b=run.build;if(offer.kind==='firewall'){if(!FIREWALL[offer.key])return false;b.firewall[offer.key]++;if(offer.key==='health'){run.maxHp+=4;run.hp=Math.min(run.maxHp,run.hp+4);}}
+ else if(offer.kind==='shell'){if(!SHELL[offer.key])return false;b.shell[offer.key]++;b.shellMarks.push(offer.key);}
+ else if(offer.kind==='core'){if(!CORES[offer.key])return false;const existing=b.cores.find(c=>c.type===offer.key);if(existing)existing.level++;else b.cores.push({id:++b.serial,type:offer.key,level:1});}else return false;run.event=upgradeLabel(offer)+' / INSTALLED';return true;}
+export function chooseArtifact(run,a,index){if(run.dead||a.taken||!a.offers||!Number.isInteger(index)||index<0||index>1)return false;if(!install(run,a.offers[index]))return false;a.taken=true;run.artifacts++;return true;}
+export function reorder(build,id,target){const i=build.cores.findIndex(c=>c.id===id);if(i<0||!Number.isInteger(target)||target<0||target>=build.cores.length)return false;const [part]=build.cores.splice(i,1);build.cores.splice(target,0,part);return true;}
+export function salvageValue(core){return core.level*2;}
+export function salvage(build,id){const i=build.cores.findIndex(c=>c.id===id);if(i<0)return 0;const value=salvageValue(build.cores[i]);build.cores.splice(i,1);build.scrap+=value;return value;}
+export function buyShell(run,key){const def=SHELL[key];if(!def||run.dead||run.build.scrap<def.cost)return false;run.build.scrap-=def.cost;install(run,{kind:'shell',key});return true;}
+export function firingStats(build){const level=t=>build.cores.find(c=>c.type===t)?.level||0;const rate=1+.2*build.shell.rate;return {damage:1+build.shell.damage,count:Math.min(6,1+build.shell.count),interval:Math.max(.07,1/(rate*(1+.15*Math.max(0,level('auto')-1)))),chargeTime:Math.max(.2,1.5/rate),maxCharge:2+level('charge'),auto:level('auto')>0,charge:level('charge')>0};}
+export function suitGlyphBudget(run){return Math.min(2400,72+run.maxHp*6+Object.values(run.build.firewall).reduce((a,b)=>a+b,0)*32);}
+export function suitVisibleGlyphs(run){return Math.floor(suitGlyphBudget(run)*Math.max(0,run.hp)/run.maxHp);}
+export function beginTrigger(state,stats){if(state.held)return false;state.held=true;state.charge=0;return !stats.charge;}
+export function endTrigger(state,stats){const fire=state.held&&stats.charge;state.held=false;return fire;}
+export function newTrigger(){return {held:false,charge:0};}
+// Projectile programs are snapshots: editing affects future shots, never mutates
+// existing bullets. Bounce advances the program on contact; split on its timer.
+export function armProgram(b){while(b.pc<b.program.length){const c=b.program[b.pc];if(c.type==='split'){b.splitDelay=.28;b.splitLevel=c.level;return;}if(c.type==='bounce'){b.bounces=Math.min(12,1+c.level);b.waitBounce=true;return;}b.pc++;}b.splitDelay=null;}
+export function projectileProgram(build){return build.cores.map(c=>({...c}));}
+export function childrenOf(b){const n=Math.min(8,2+b.splitLevel);return Array.from({length:n},(_,i)=>({...b,pc:b.pc+1,splitDelay:null,waitBounce:false,splitLevel:0,angle:(i-(n-1)/2)*.16,damage:b.damage*.7,life:Math.min(1.7,b.life),generation:(b.generation||0)+1}));}
