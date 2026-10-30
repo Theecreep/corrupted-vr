@@ -1,4 +1,4 @@
-import {baseBuild,rollOffers,chooseArtifact} from './build.js?v=003';
+import {baseBuild,rollOffers,chooseArtifact} from './build.js?v=003r1';
 // Deterministic simulation. Rendering and XR never own run state.
 export const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export const dist=(a,b)=>Math.hypot(a.x-b.x,a.z-b.z);
@@ -45,4 +45,5 @@ export function step(run,p,dt,{hidden=false,airborne=false}={}){if(run.dead)retu
  }
  run.spawnTimer-=dt;if(run.spawnTimer<=0){run.spawnTimer=s===3?4:Math.max(7,18-s*4);map.enemies=map.enemies.filter(e=>e.hp>0);const alive=map.enemies.length;if(alive<Math.min(14,5+s*3+Math.floor(run.island/3))){for(let i=0;i<20;i++){const a=map.random()*Math.PI*2,q={x:Math.cos(a)*18,z:Math.sin(a)*18};if(stand(map,q.x,q.z)&&dist(q,p)>9){map.enemies.push({...q,id:map.nextEnemyId++,hp:4+Math.min(20,run.island),mode:'search',target:{x:p.x,z:p.z},timer:4,attack:1,windup:0,alert:0});break;}}}}
 }
+
 

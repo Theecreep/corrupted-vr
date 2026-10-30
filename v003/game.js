@@ -1,7 +1,7 @@
 import * as T from './three.module.js';
-import {newRun,height,shore,stand,move,sight,dist,collect,extract,kill,stage,step,smoothTurn,rng,clamp} from './core.js?v=003';
-import {FIREWALL,SHELL,CORES,install,reorder,salvage,buyShell,firingStats,suitGlyphBudget,suitVisibleGlyphs,newTrigger,beginTrigger,endTrigger,projectileProgram,armProgram,childrenOf} from './build.js?v=003';
-import {Workbench} from './bench.js?v=003';
+import {newRun,height,shore,stand,move,sight,dist,collect,extract,kill,stage,step,smoothTurn,rng,clamp} from './core.js?v=003r1';
+import {FIREWALL,SHELL,CORES,install,reorder,salvage,buyShell,firingStats,suitGlyphBudget,suitVisibleGlyphs,newTrigger,beginTrigger,endTrigger,projectileProgram,armProgram,childrenOf} from './build.js?v=003r1';
+import {Workbench} from './bench.js?v=003r1';
 const $=s=>document.querySelector(s),scene=new T.Scene();scene.background=new T.Color('#060e12');scene.fog=new T.FogExp2('#060e12',.025);
 const renderer=new T.WebGLRenderer({antialias:false,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.3));renderer.setSize(innerWidth,innerHeight);renderer.xr.enabled=true;renderer.xr.setReferenceSpaceType('local-floor');renderer.xr.setFramebufferScaleFactor(.85);$('#world').append(renderer.domElement);
 const rig=new T.Group(),camera=new T.PerspectiveCamera(72,innerWidth/innerHeight,.06,140);camera.rotation.order='YXZ';rig.add(camera);scene.add(rig);
@@ -113,6 +113,7 @@ renderer.setAnimationLoop(ms=>{const dt=Math.min(.033,(ms-last)/1000||0);last=ms
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();setActive(false);$('#load').textContent='GRAPHICS CONTEXT LOST / RELOAD TO RECOVER';});
 buildWorld();updateAppearance();updateHud();window.corruptedReady=true;$('#load').textContent=`READY / ${glyphCount.toLocaleString()} GLYPHS / 0.03 / FIREWALL & CANNON`;
 window.corrupted={get state(){return {version:'0.03',lab:labMode,hp:run.hp,maxHp:run.maxHp,kills:run.kills,island:run.island,artifacts:run.artifacts,corruption:run.corruption,floor:run.floor,dead:run.dead,seed:run.map.seed,position:{...p},yaw,active,build:JSON.parse(JSON.stringify(run.build)),suitSymbols:suitVisibleGlyphs(run),hood:bench.open,projectiles:bullets.length,enemies:run.map.enemies.filter(e=>e.hp>0).length,drawCalls:renderer.info.render.calls,triangles:renderer.info.render.triangles};}};
+
 
 
 

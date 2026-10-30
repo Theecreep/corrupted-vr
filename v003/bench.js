@@ -1,5 +1,5 @@
 import * as T from './three.module.js';
-import {FIREWALL,SHELL,CORES,upgradeLabel,salvageValue} from './build.js?v=003';
+import {FIREWALL,SHELL,CORES,upgradeLabel,salvageValue} from './build.js?v=003r1';
 // One interaction model for physical VR parts and desktop controls.
 export class Workbench{
  constructor(mount,callbacks){this.mount=mount;this.callbacks=callbacks;this.group=new T.Group();mount.add(this.group);this.open=false;this.choice=null;this.pending=null;this.drag=null;this.hovered=null;this.raycaster=new T.Raycaster();this.targets=[];this.panel=document.querySelector('#workbench');this.panel.addEventListener('click',e=>{const b=e.target.closest('button[data-action]');if(b)this.act(b.dataset.action,b.dataset.value);});this.rebuild();}
@@ -41,3 +41,4 @@ export class Workbench{
  release(hand){if(!this.drag)return;const id=this.drag.id;const bin=this.targets.find(m=>m.userData.action==='salvageDrop');if(bin&&bin.getWorldPosition(new T.Vector3()).distanceTo(hand)<.14)this.pending=id;else{const slots=this.targets.filter(m=>m.userData.kind==='slot').sort((a,b)=>a.getWorldPosition(new T.Vector3()).distanceTo(hand)-b.getWorldPosition(new T.Vector3()).distanceTo(hand));if(slots[0]?.getWorldPosition(new T.Vector3()).distanceTo(hand)<.19)this.callbacks.reorder(id,slots[0].userData.value);}this.rebuild();}
  reset(){this.open=false;this.choice=null;this.pending=null;this.rebuild();}
 }
+
