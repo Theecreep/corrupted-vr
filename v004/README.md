@@ -1,6 +1,6 @@
 # CORRUPTED v0.04 — local systems test
 
-**Status: published as an isolated test at https://theecreep.github.io/corrupted-vr/v004/. Hosted desktop smoke checks passed after fixing a WebXR status-property error; 35 simulation tests pass. Quest hardware acceptance remains outstanding.** The existing main game link is unchanged. See TEST-REPORT.md for the exact checks and limits.
+**Status: published as an isolated test at https://theecreep.github.io/corrupted-vr/v004/. Hosted desktop smoke checks passed after fixing a WebXR status-property error; 39 simulation tests pass. Quest hardware acceptance remains outstanding.** The existing main game link is unchanged. See TEST-REPORT.md for the exact checks and limits.
 
 ## Run
 
@@ -33,7 +33,7 @@ Desktop: WASD move; mouse (after ENTER) or arrows look; Space jump; click/F fire
 
 Quest: left stick move, right stick smooth turn; right A jump, B Blaster, trigger fire; left Y Firewall, X rear utility, trigger front utility. Either grip interacts with the world; the opposing hand grips parts inside an open arm. Hold B+Y together for about 0.6 seconds to pause/resume. Physical crouching reduces detection. Grip after death restarts.
 
-SYSTEMS LAB supplies all cores/utilities and stat points; normal runs do not. Its purpose is arm/core experimentation. Return to NEW RUN for survival.
+SYSTEMS LAB supplies all cores/utilities and stat points; normal runs do not. Its purpose is arm/core experimentation. Automatic enemy spawning is disabled in Lab; LAB DOPPELGANGER creates a real randomly equipped opponent for an explicit encounter test. N in the test HUD counts living hostiles. Return to NEW RUN for survival.
 
 ## Acceptance sequence
 
@@ -47,3 +47,11 @@ SYSTEMS LAB supplies all cores/utilities and stat points; normal runs do not. It
 This is a mechanics skeleton with hosted desktop smoke verification, not the complete game or a Quest-approved release. Beam trails, spray presentation, core reach, body proportions, enemy navigation/traversal, balance and Quest performance need actual playtesting. No persistent discovery/achievement storage, new biomes, water stalker, leviathan, narrative secrets, native Steam/Quest package, or finished audio/art pass. Those remain future work rather than invented content in this slice. Room-scale collision at the headset's physical offset is not fully solved: locomotion collision uses the player rig.
 
 The test report distinguishes simulation evidence from unverified rendering and hardware behavior.
+
+## Terminal and dagger update
+
+Menus, panels and test HUD use bundled VT323 from https://github.com/google/fonts/tree/main/ofl/vt323 under VT323-OFL.txt. No runtime font CDN. World glyph geometry is unchanged by the UI font choice.
+
+Parry Dagger melee: level N deals N damage; from level 10 add current Blaster Power damage (20 at level 10 with baseline Power). One hit per enemy contact; clear the blade before striking again. Damage uses the same system and XP attribution as projectiles. Longer-blade overclocks and reflection remain. Physical hit reach requires Quest validation.
+
+Crawler and other level-10 special upgrades are recorded future decisions, not in this build.

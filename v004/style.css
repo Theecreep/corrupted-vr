@@ -2,3 +2,8 @@
 
 /* Keep the VR and sound controls reachable while the title is open. */
 #menu{pointer-events:none}.panel{pointer-events:auto}
+
+/* Self-hosted VT323, SIL OFL. UI only; world glyph geometry retains its atlas. */
+@font-face{font-family:VT323;src:url('./VT323-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+html,body,button,input,small,.controls,.intro{font-family:VT323,'Lucida Console',monospace!important;font-weight:400}
+html,body{font-size:20px}button{font-size:21px}h1{font-size:clamp(58px,8vw,104px);letter-spacing:2px;margin:16px 0}.intro{font-size:30px!important;line-height:1.2!important}.controls{font-size:18px;line-height:1.3!important}.eyebrow,small{font-size:16px;letter-spacing:1px}.panel p:not(.intro){font-size:19px;line-height:1.35}header b{font-size:25px;letter-spacing:2px}header b span,header label,footer{font-size:16px}#panel{font-size:23px}#panel p{font-size:18px}#panel button{font-size:20px!important;padding:7px 10px!important}#stats{font-size:23px;line-height:1.25!important}#message{font-size:25px}#seed{font-size:21px}#start{font-size:23px}body.xr #message{display:none}
