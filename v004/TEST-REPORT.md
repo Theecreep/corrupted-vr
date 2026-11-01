@@ -1,5 +1,29 @@
 # v0.04 verification
 
+## Hosted verification update — November 1, 2026
+
+Published with user authorization at https://theecreep.github.io/corrupted-vr/v004/ (initial upload 2b96e465968703ab5426765ca3a280ffcb08fffe). Browser testing found a real startup failure: `renderer.xr.isPresenting` was called as a function in the paused indicator. Fixed to read the property, and versioned the entry module URL. Fix commit: 29358a561d8e67c273f9536b698019e41d8119bc.
+
+Observed in the hosted browser after the fix:
+
+- Island and glyph geometry render; animation, HUD and corruption advance.
+- Lab exposes three active and two reserve Blaster slots, two active and one reserve Firewall slots, all initial cores/utilities, and test points.
+- Power and Mobility purchases increment ranks and consume one point.
+- Charge/Automatic active-slot swap appears in the updated editor.
+- Scrapping Homing empties its reserve slot and adds a point.
+- Lab damage reduces HP to 75; later normal regeneration restores health.
+- Desktop movement changes coordinates; turning changes the view; sustained firing drains energy (45/80 observed), then energy recovers.
+- Walked around a solid ruin to the central artifact. Chose Firewall Dash; owned Dash overclocked, artifact closed, extraction became available.
+- Returned to the access point and extracted: island 2, new seed 7961 from seed 42, points retained at 17, corruption reduced from about 31 to 9 percent.
+- Escape exposes pause menu. NEW RUN restores island 1, zero points, seven rank-one stats and empty active/reserve Blaster slots.
+- No new warning/error entries after the fix during these checks; the browser log retained the earlier startup error with its original timestamp.
+
+Screenshot: ../corrupted-v004-hosted.jpg. Existing root/main game page and v003 remain unchanged.
+
+Still unverified: physical Quest/controller operation, VR pause chord, comfort/frame rate, complete enemy combat balance, prolonged resource stability, all physical editor gestures, full weapon-combination presentation, and direct-file operation. The simulation tests below cover rules but do not substitute for those checks.
+
+The following records the earlier local-only verification, before hosted testing resolved the preview blocker.
+
 ## Passed in this work session
 
 - JavaScript syntax checks for game, model, simulation and graphics modules.
@@ -11,8 +35,8 @@
 - Browser render, mouse/keyboard integration, physical VR grabbing, panel layout, screenshots, controller tracking, Quest frame rate and comfort.
 - Local server processes announced listening, but browser HTTP connections timed out or were refused. Network permission was requested and granted; retrying with a persistent terminal did not produce a reachable preview. A same-process local HTTP probe succeeded, but that is not evidence the game was browser-accessible.
 - The browser URL policy blocked file:// navigation for the standalone build. No alternative browser surface was used to evade that restriction.
-- No GitHub Pages upload or deployment verification in this update. Existing hosted version unchanged.
+- At that earlier checkpoint no GitHub Pages upload had occurred; see hosted update above for current publication status.
 
 ## Release gate
 
-Open the standalone desktop build or run the local server from the user's ordinary terminal, then verify visible gameplay. Fix observed issues before HTTPS Quest staging. Run the headset checklist in README before promoting the main game link.
+Hosted desktop smoke verification is now complete. Run the headset checklist in README against `/v004/` before promoting the main game link.

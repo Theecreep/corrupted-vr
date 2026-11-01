@@ -8,5 +8,5 @@ function rewrite(s){return s.replace(/import\s+([^;]+?)\s+from\s+['"]\.\/([^'"]+
 for(const [file,name] of Object.entries(modules).slice(1)){const s=await read(file),exports=[...s.matchAll(/export\s+(?:function|class|const|let)\s+(\w+)/g)].map(m=>m[1]);if(file==='graphics.js')exports.push('T');bundle+=`const ${name}=(()=>{${rewrite(s).replace(/export\s*\{T\};/g,'').replace(/\bexport\s+/g,'')}\nreturn {${exports.join(',')}};})();\n`;}
 bundle+=`(()=>{${rewrite(await read('game.js'))}})();`;
 await fs.writeFile(new URL('bundle-check.js',root),bundle);
-let html=await read('index.html');html=html.replace('<link rel="stylesheet" href="style.css">',`<style>${await read('style.css')}</style>`).replace('<script type="module" src="game.js"></script>',()=>`<script type="module">${bundle.replace(/<\/script/gi,'<\\/script')}</script>`);
+let html=await read('index.html');html=html.replace('<link rel="stylesheet" href="style.css">',`<style>${await read('style.css')}</style>`).replace(/<script type="module" src="game\.js(?:\?[^"]*)?"><\/script>/,()=>`<script type="module">${bundle.replace(/<\/script/gi,'<\\/script')}</script>`);
 await fs.writeFile(new URL('CORRUPTED-v0.04-offline.html',root),html);console.log('Created standalone desktop test build');

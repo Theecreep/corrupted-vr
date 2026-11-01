@@ -1,14 +1,14 @@
 # CORRUPTED v0.04 — local systems test
 
-**Status: source assembled; 35 simulation tests passed. Rendered browser operation and Quest acceptance are NOT verified. Not published.** The browser preview could not connect to the local server in this automation session. Its URL policy also disallowed opening a file URL. This build must pass a visible browser check before replacing the hosted demo.
+**Status: published as an isolated test at https://theecreep.github.io/corrupted-vr/v004/. Hosted desktop smoke checks passed after fixing a WebXR status-property error; 35 simulation tests pass. Quest hardware acceptance remains outstanding.** The existing main game link is unchanged. See TEST-REPORT.md for the exact checks and limits.
 
 ## Run
 
-- Desktop: open `CORRUPTED-v0.04-offline.html` in your normal desktop browser. This standalone file includes Three.js and styles; no download service or installation is required. Direct-file operation has not been visually tested here.
+- Desktop: open `CORRUPTED-v0.04-offline.html` in your normal desktop browser. This generated standalone file includes Three.js and styles; no download service or installation is required. Generate it with `node bundle.mjs` if using the GitHub source checkout. Direct-file operation has not been visually tested here.
 - Development: install/use Node.js, open a terminal in this folder, run `npm start`, then visit http://127.0.0.1:8080/. If 8080 is occupied, set the PORT environment variable to another port before starting.
 - Automated checks: `npm test`.
 - Rebuild standalone after changes: `node bundle.mjs`. The generated `bundle-check.js` can be checked with `node --check bundle-check.js`.
-- Quest: use an HTTPS-hosted copy of this folder and choose ENTER VR. A localhost URL on the PC is not a Quest link. GitHub Pages remains the intended host; nothing has been uploaded in this update. Do not replace the existing main page until desktop and Quest checks pass.
+- Quest: use an HTTPS-hosted copy of this folder and choose ENTER VR. A localhost URL on the PC is not a Quest link. GitHub Pages remains the intended host; the isolated `/v004/` build is now published there. The existing main page remains unchanged pending Quest acceptance.
 
 Three.js r170 and its MIT license are bundled. The normal web build uses relative ES-module imports. No CDN, framework install, external API, backend, login or analytics. The offline file is for desktop convenience; it does not replace an HTTPS Quest deployment.
 
@@ -44,6 +44,6 @@ SYSTEMS LAB supplies all cores/utilities and stat points; normal runs do not. It
 
 ## Boundaries and unfinished verification
 
-This is a mechanics skeleton, not the complete game or a visually approved release. Beam trails, spray presentation, core reach, body proportions, enemy navigation/traversal, balance and Quest performance need actual playtesting. No persistent discovery/achievement storage, new biomes, water stalker, leviathan, narrative secrets, native Steam/Quest package, or finished audio/art pass. Those remain future work rather than invented content in this slice. Room-scale collision at the headset's physical offset is not fully solved: locomotion collision uses the player rig.
+This is a mechanics skeleton with hosted desktop smoke verification, not the complete game or a Quest-approved release. Beam trails, spray presentation, core reach, body proportions, enemy navigation/traversal, balance and Quest performance need actual playtesting. No persistent discovery/achievement storage, new biomes, water stalker, leviathan, narrative secrets, native Steam/Quest package, or finished audio/art pass. Those remain future work rather than invented content in this slice. Room-scale collision at the headset's physical offset is not fully solved: locomotion collision uses the player rig.
 
 The test report distinguishes simulation evidence from unverified rendering and hardware behavior.
