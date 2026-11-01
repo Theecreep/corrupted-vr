@@ -1,5 +1,15 @@
 # v0.04 verification
 
+## Terminal / dagger / encounter revision
+
+39 automated tests now pass. Added level-10 dagger scaling, once-per-contact melee, editor interlock/kill XP, and a seeded normal-run Doppelganger hunt that kills the idle player within 60 simulated seconds.
+
+Hosted revision 1680153946ce1601722e98c51d09f2352d45cd27 was visually checked: VT323 renders in the menu and editor; desktop no longer shows a redundant floating VR editor behind its panel; LAB DOPPELGANGER produces N=1, an approaching code-body opponent, incoming damage (HP 90 observed) and eventual player death. The existing death/restart presentation works. This verifies presence and attack behavior, not a successful full player combat playthrough or VR melee.
+
+Follow-up source review corrected body height/leg proportions, hides the player's own head in first person, and makes LAB DOPPELGANGER close the editor immediately so the player can fight without a second close action. The same full body remains visible on enemies. Screenshot: ../corrupted-v004-terminal.jpg.
+
+Crawler and other level-10 milestones remain deferred, as requested. Physical controller interactions and Quest performance still require a headset test.
+
 ## Hosted verification update — November 1, 2026
 
 Published with user authorization at https://theecreep.github.io/corrupted-vr/v004/ (initial upload 2b96e465968703ab5426765ca3a280ffcb08fffe). Browser testing found a real startup failure: `renderer.xr.isPresenting` was called as a function in the paused indicator. Fixed to read the property, and versioned the entry module URL. Fix commit: 29358a561d8e67c273f9536b698019e41d8119bc.

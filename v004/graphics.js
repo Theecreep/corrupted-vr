@@ -1,6 +1,6 @@
 import * as T from './three.module.js';
-import {stats,cores,values} from './model.js?v=004r2';
-import {height,land,rng} from './simulation.js?v=004r2';
+import {stats,cores,values} from './model.js?v=004r3';
+import {height,land,rng} from './simulation.js?v=004r3';
 export {T};
 const chars=' .,:;~=#%+|/\\@*oX[]^0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ<>!?-';
 const atlas=document.createElement('canvas');atlas.width=4096;atlas.height=64;const ac=atlas.getContext('2d');ac.fillStyle='white';ac.font='bold 38px monospace';ac.textAlign='center';ac.textBaseline='middle';[...chars].forEach((c,i)=>ac.fillText(c,i*48+24,32));const texture=new T.CanvasTexture(atlas);texture.colorSpace=T.SRGBColorSpace;
@@ -16,9 +16,9 @@ export function worldGeometry(map,group){clear(group);const random=rng(map.seed)
  for(let i=0;i<350;i++)glyph(air,chars[20+Math.floor(random()*30)],(random()-.5)*extent*2,.5+random()*8,(random()-.5)*extent*2,.045);
  for(let i=0;i<700;i++){const a=random()*6.28,y=.1+random()*.9,r=65*Math.sqrt(1-y*y);glyph(star,i%3?'.':'+',Math.cos(a)*r,y*65,Math.sin(a)*r,.10);}
  mesh(landB,group);const water=mesh(sea,group);mesh(ruin,group);const particles=mesh(air,group);mesh(star,group);return {water,particles};}
-export function frame(group,c,part){const signature=JSON.stringify([c.history,c.slots,part]);if(group.userData.signature!==signature){clear(group);group.userData.signature=signature;const base=batch('#72a799'),marks=Object.fromEntries(Object.entries(stats).map(([k,v])=>[k,batch(v.color)]));
+export function frame(group,c,part,firstPerson=false){const signature=JSON.stringify([c.history,c.slots,part,firstPerson]);if(group.userData.signature!==signature){clear(group);group.userData.signature=signature;const base=batch('#72a799'),marks=Object.fromEntries(Object.entries(stats).map(([k,v])=>[k,batch(v.color)]));
  const full=part==='body';for(let i=0;i<(full?180:60);i++){const a=i*2.39996,r=full?.2:.055,z=full?Math.sin(a)*.12:(i%20)/20*.4;glyph(base,i%3?'|':'+',Math.cos(a)*r,full?-(i%30)/30*.6:Math.sin(a)*r,z,.025,i%2?'front':'side');}
- if(full){for(const side of [-1,1])for(let i=0;i<50;i++){const a=i*2.4;glyph(base,'|',side*.1+Math.cos(a)*.055,-.6-(i%20)/20*.55,Math.sin(a)*.055,.025,i%2?'side':'front');}for(let i=0;i<50;i++){const a=i*2.4;glyph(base,i%7?'#':'X',Math.cos(a)*.11,.08+(i%12)/12*.22,Math.sin(a)*.1,.025,i%2?'side':'front');}}
+ if(full){for(const side of [-1,1])for(let i=0;i<50;i++){const a=i*2.4;glyph(base,'|',side*.1+Math.cos(a)*.055,-.6-(i%20)/20*.75,Math.sin(a)*.055,.025,i%2?'side':'front');}if(!firstPerson)for(let i=0;i<50;i++){const a=i*2.4;glyph(base,i%7?'#':'X',Math.cos(a)*.11,.08+(i%12)/12*.22,Math.sin(a)*.1,.025,i%2?'side':'front');}}
  if(part==='blaster')for(let z=-.35;z<=.05;z+=.045)for(let a=0;a<6.28;a+=Math.PI/2)glyph(base,'=',Math.cos(a)*.075,Math.sin(a)*.075,z,.03,a<3?'up':'side');
  c.history.forEach((entry,i)=>{const s=stats[entry.key],onBody=s.arm==='firewall'&&i%3===0;if(full?onBody:s.arm===part&&!onBody){const a=i*2.39996,r=full?.23:.083;glyph(marks[entry.key],s.glyph,Math.cos(a)*r,full?-(i%35)/35*.75:Math.sin(a)*r,full?Math.sin(a)*.15:.35-(i%25)*.025,.03,i%2?'side':'front');}});mesh(base,group);for(const b of Object.values(marks))if(b.v.length)mesh(b,group);
  if(!full){const coreB=batch('#d1b5f4');c.slots[part].forEach((core,i)=>{if(core)glyph(coreB,cores[core.type].glyph,-.06+i*.03,.09,-.15,.035,'up');});mesh(coreB,group);}}

@@ -1,4 +1,4 @@
-import {character,values,tuning,damage,updateCharacter,compile,press,release,weaponTick,acquire,stats,addPoints,spend,gainXP,artifactOffers,resolveArtifact,setEditor,parryDamage} from './model.js?v=004r2';
+import {character,values,tuning,damage,updateCharacter,compile,press,release,weaponTick,acquire,stats,addPoints,spend,gainXP,artifactOffers,resolveArtifact,setEditor,parryDamage} from './model.js?v=004r3';
 export const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export const length=v=>Math.hypot(v.x,v.y||0,v.z);
 export const norm=v=>{const n=length(v)||1;return {x:v.x/n,y:(v.y||0)/n,z:v.z/n};};
